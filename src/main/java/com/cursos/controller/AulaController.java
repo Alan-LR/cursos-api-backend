@@ -85,6 +85,12 @@ public class AulaController {
 		return new ResponseEntity<List<Aula>>(aulaService.pegarTodos(), HttpStatus.OK);
 	}
 	
+	//Metodo para retornar todas as aulas de um curso
+	@GetMapping(value = "/curso/{id}")
+	public ResponseEntity<List<Aula>> aulasCurso(@PathVariable Integer id){
+		return new ResponseEntity<List<Aula>>(aulaService.aulasCurso(id), HttpStatus.OK);
+	}
+	
 	@DeleteMapping("/{id}")
 	// ? - quer dizer que podemos retornar qualquer coisa, algo generico
 	public ResponseEntity<?> deleteAula(@PathVariable(value = "id") Integer id) {

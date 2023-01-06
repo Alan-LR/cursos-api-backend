@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.cursos.models.Curso;
@@ -29,7 +30,11 @@ public class CursoService {
 	public Page<Curso> findAll(PageRequest page) {
 		 return cursosRepository.findAll(page);
 	}
-
+	
+	public Page<Curso> findAllPage(Pageable pageable) {
+		return cursosRepository.findAll(pageable);
+	}
+	
 	public List<Curso> pegarTodos() {
 		return cursosRepository.findAll();
 	}
@@ -37,5 +42,6 @@ public class CursoService {
 	public void delete(Integer id) {
 		cursosRepository.deleteById(id);
 	}
+
 	
 }

@@ -38,4 +38,8 @@ public class AulaService {
 		
 	}
 
+	public List<Aula> aulasCurso(Integer id) {
+		return aulasRepository.aulasCurso(id); 
+	}
+
 }

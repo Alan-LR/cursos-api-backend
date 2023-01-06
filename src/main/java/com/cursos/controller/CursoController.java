@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cursos.models.Curso;
@@ -78,13 +81,23 @@ public class CursoController {
 		// UsuarioDTO(x)).collect(Collectors.toList());
 		return new ResponseEntity<Page<Curso>>(listPage, HttpStatus.OK);
 	}
+	
+	@GetMapping("/pageable")
+    public ResponseEntity<Page<Curso>> getAllLives(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+        Page<Curso> livePage = cursoService.findAllPage(pageable);
+        if(livePage.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<Page<Curso>>(livePage, HttpStatus.OK);
+        }
+    } 
 
 	// Retornando todos os cursos sem paginação
 	@GetMapping(value = "/", produces = "application/json")
 	public ResponseEntity<List<Curso>> todosCursos() {
 		return new ResponseEntity<List<Curso>>(cursoService.pegarTodos(), HttpStatus.OK);
 	}
-
+	
 	@DeleteMapping("/{id}")
 	// ? - quer dizer que podemos retornar qualquer coisa, algo generico
 	public ResponseEntity<?> deleteCurso(@PathVariable(value = "id") Integer id) {

@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -20,11 +23,13 @@ public class Aula implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@NotBlank
 	@Column(nullable = false)
 	private String nomeAula;
+	@NotBlank
 	private String aulaLink;
 
-	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "curso_id", nullable = false)
 	//nullable quer dizer que esse campo não pode ser nulo
@@ -40,7 +45,7 @@ public class Aula implements Serializable {
 		this.aulaLink = aulaLink;
 		this.curso = curso;
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -65,6 +70,7 @@ public class Aula implements Serializable {
 		this.aulaLink = aulaLink;
 	}
 
+	
 	public Curso getCurso() {
 		return curso;
 	}
