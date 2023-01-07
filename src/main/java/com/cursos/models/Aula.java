@@ -29,7 +29,7 @@ public class Aula implements Serializable {
 	@NotBlank
 	private String aulaLink;
 
-	@JsonIgnore
+	
 	@ManyToOne
 	@JoinColumn(name = "curso_id", nullable = false)
 	//nullable quer dizer que esse campo não pode ser nulo

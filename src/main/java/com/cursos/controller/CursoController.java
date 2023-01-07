@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cursos.models.Curso;
@@ -38,6 +39,13 @@ public class CursoController {
 	public ResponseEntity<Curso> salvarCurso(@RequestBody Curso curso) {
 		return new ResponseEntity<Curso>(cursoService.salvarCurso(curso), HttpStatus.CREATED);
 	}
+	
+	//Exemplo utilizando o @ResponseStatus
+	@PostMapping(value = "/postCursoTeste")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public Curso postCursoTeste(@RequestBody Curso curso) {
+		return cursoService.salvarCurso(curso);
+	}
 
 	// Alterando curso pegando o seu ID
 	@PutMapping("/{id}")
@@ -49,7 +57,6 @@ public class CursoController {
 			curso.setId(cursoOp.get().getId());
 			return new ResponseEntity<Curso>(cursoService.salvarCurso(curso), HttpStatus.OK);
 		}
-
 	}
 
 	// Alterando curso (Recebendo id no corpo json)

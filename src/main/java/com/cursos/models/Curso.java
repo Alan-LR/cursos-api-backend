@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -27,14 +29,15 @@ public class Curso implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	//@JsonProperty("_id") - informa como esse dado chegará no front-end
 	private Integer id;
-	@NotBlank
-	@Column(length = 50, nullable = false)
+	@NotBlank(message = "Por favor, digite um nome") //Não permite salvar nulo ou vázio
+	@Column(length = 50, nullable = false, unique = true) //Unique = não deixa repetir o nome salvo
 	private String nome;
 	@NotBlank
 	@Column(length = 15, nullable = false)
 	private String categoria;
-
-	@OneToMany(mappedBy = "curso", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	
+	//orphanRemoval, para remover as aulas - cascade = CascadeType.REMOVE, remover as aulas só quando curso for removido
+	@OneToMany(mappedBy = "curso", orphanRemoval = true, cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<Aula> aulas = new ArrayList<Aula>();
 
 	public Curso() {
@@ -72,6 +75,7 @@ public class Curso implements Serializable {
 		this.nome = nome;
 	}
 
+	@JsonIgnore
 	public List<Aula> getAulas() {
 		return aulas;
 	}
