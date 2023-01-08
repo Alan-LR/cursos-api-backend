@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cursos.models.Aula;
@@ -84,13 +87,20 @@ public class AulaController {
 	public ResponseEntity<List<Aula>> todosCursos() {
 		return new ResponseEntity<List<Aula>>(aulaService.pegarTodos(), HttpStatus.OK);
 	}
-	
-	//Metodo para retornar todas as aulas de um curso
+
+	// Metodo para retornar todas as aulas de um curso
 	@GetMapping(value = "/curso/{id}")
-	public ResponseEntity<List<Aula>> aulasCurso(@PathVariable Integer id){
-		return new ResponseEntity<List<Aula>>(aulaService.aulasCurso(id), HttpStatus.OK);
+	public ResponseEntity<Page<Aula>> aulasCurso(
+			@PathVariable Integer id,
+			@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+		Page<Aula> aulasPage = aulaService.aulasCurso(id, pageable);
+		if(aulasPage.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Page<Aula>>(aulasPage, HttpStatus.OK);
 	}
-	
+
+
 	@DeleteMapping("/{id}")
 	// ? - quer dizer que podemos retornar qualquer coisa, algo generico
 	public ResponseEntity<?> deleteAula(@PathVariable(value = "id") Integer id) {

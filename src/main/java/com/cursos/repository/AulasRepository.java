@@ -1,10 +1,12 @@
 package com.cursos.repository;
 
-import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 import com.cursos.models.Aula;
 
@@ -13,5 +15,5 @@ import com.cursos.models.Aula;
 public interface AulasRepository extends JpaRepository<Aula, Integer>{
 
 	@Query(nativeQuery = true, value = "select * from aulas where curso_id = ?1")
-	List<Aula> aulasCurso(Integer id);
+	Page<Aula> aulasCurso(Integer id, Pageable pageable);
 }

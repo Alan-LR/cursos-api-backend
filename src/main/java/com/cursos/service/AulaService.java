@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.cursos.models.Aula;
@@ -34,12 +35,12 @@ public class AulaService {
 	}
 
 	public void delete(Integer id) {
-		aulasRepository.deleteById(id);
-		
+		aulasRepository.deleteById(id);	
 	}
 
-	public List<Aula> aulasCurso(Integer id) {
-		return aulasRepository.aulasCurso(id); 
+	public Page<Aula> aulasCurso( Integer id, Pageable pageable) {
+		return aulasRepository.aulasCurso(id, pageable); 
 	}
+	
 
 }
