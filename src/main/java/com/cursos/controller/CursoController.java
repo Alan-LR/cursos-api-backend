@@ -3,6 +3,8 @@ package com.cursos.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,13 +36,22 @@ public class CursoController {
 	@Autowired
 	private CursoService cursoService;
 
+	// Nova logica com post
+	@PostMapping(value = "/novoAdd", produces = "application/json")
+	public ResponseEntity<Curso> salvarNovoAdd(@Valid @RequestBody Curso curso) throws Exception {
+		for (int pos = 0; pos < curso.getAulas().size(); pos++) {
+			curso.getAulas().get(pos).setCurso(curso);
+		}
+		return new ResponseEntity<Curso>(cursoService.salvarCurso(curso), HttpStatus.CREATED);
+	}
+
 	// Criar um curso
 	@PostMapping(value = "/")
 	public ResponseEntity<Curso> salvarCurso(@RequestBody Curso curso) {
 		return new ResponseEntity<Curso>(cursoService.salvarCurso(curso), HttpStatus.CREATED);
 	}
-	
-	//Exemplo utilizando o @ResponseStatus
+
+	// Exemplo utilizando o @ResponseStatus
 	@PostMapping(value = "/postCursoTeste")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Curso postCursoTeste(@RequestBody Curso curso) {
@@ -50,11 +61,17 @@ public class CursoController {
 	// Alterando curso pegando o seu ID
 	@PutMapping("/{id}")
 	public ResponseEntity<Curso> alterarCurso(@PathVariable Integer id, @RequestBody Curso curso) {
+		System.out.println("Alterando corretamente");
+
+		for (int pos = 0; pos < curso.getAulas().size(); pos++) {
+			curso.getAulas().get(pos).setCurso(curso);
+		}
+
 		Optional<Curso> cursoOp = cursoService.findById(id);
 		if (!cursoOp.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
-			curso.setId(cursoOp.get().getId());
+			curso.setCurso_id(cursoOp.get().getCurso_id());
 			return new ResponseEntity<Curso>(cursoService.salvarCurso(curso), HttpStatus.OK);
 		}
 	}
@@ -88,23 +105,24 @@ public class CursoController {
 		// UsuarioDTO(x)).collect(Collectors.toList());
 		return new ResponseEntity<Page<Curso>>(listPage, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/pageable")
-    public ResponseEntity<Page<Curso>> getAllLives(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
-        Page<Curso> livePage = cursoService.findAllPage(pageable);
-        if(livePage.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }else {
-            return new ResponseEntity<Page<Curso>>(livePage, HttpStatus.OK);
-        }
-    } 
+	public ResponseEntity<Page<Curso>> getAllLives(
+			@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+		Page<Curso> livePage = cursoService.findAllPage(pageable);
+		if (livePage.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Page<Curso>>(livePage, HttpStatus.OK);
+		}
+	}
 
 	// Retornando todos os cursos sem paginação
 	@GetMapping(value = "/", produces = "application/json")
 	public ResponseEntity<List<Curso>> todosCursos() {
 		return new ResponseEntity<List<Curso>>(cursoService.pegarTodos(), HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	// ? - quer dizer que podemos retornar qualquer coisa, algo generico
 	public ResponseEntity<?> deleteCurso(@PathVariable(value = "id") Integer id) {

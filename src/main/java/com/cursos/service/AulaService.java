@@ -21,6 +21,7 @@ public class AulaService {
 	public Aula salvarAula(Aula aula) {
 		return aulasRepository.save(aula);
 	}
+	
 
 	public Optional<Aula> findById(Integer id) {
 		return aulasRepository.findById(id);
@@ -38,7 +39,7 @@ public class AulaService {
 		aulasRepository.deleteById(id);	
 	}
 
-	public Page<Aula> aulasCurso( Integer id, Pageable pageable) {
+	public Page<Aula> aulasCurso(Integer id, Pageable pageable) {
 		return aulasRepository.aulasCurso(id, pageable); 
 	}
 	

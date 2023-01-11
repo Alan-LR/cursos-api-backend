@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cursos.models.Aula;
+import com.cursos.models.Curso;
 import com.cursos.service.AulaService;
 
 @CrossOrigin(origins = "*")
@@ -34,8 +35,8 @@ public class AulaController {
 	private AulaService aulaService;
 
 	// Criar uma aula
-	@PostMapping("/")
-	public ResponseEntity<Aula> salvarCurso(@RequestBody Aula aula) {
+	@PostMapping(value = "/" , produces = "application/json") 
+	public ResponseEntity<Aula> salvarCurso(@RequestBody Aula aula) throws Exception {
 		return new ResponseEntity<Aula>(aulaService.salvarAula(aula), HttpStatus.CREATED);
 	}
 
@@ -88,7 +89,7 @@ public class AulaController {
 		return new ResponseEntity<List<Aula>>(aulaService.pegarTodos(), HttpStatus.OK);
 	}
 
-	// Metodo para retornar todas as aulas de um curso
+	// Metodo para retornar todas as aulas de um curso com pageable
 	@GetMapping(value = "/curso/{id}")
 	public ResponseEntity<Page<Aula>> aulasCurso(
 			@PathVariable Integer id,

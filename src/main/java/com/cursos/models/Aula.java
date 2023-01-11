@@ -21,7 +21,7 @@ public class Aula implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	@NotBlank
 	@Column(nullable = false)
@@ -31,21 +31,21 @@ public class Aula implements Serializable {
 
 	
 	@ManyToOne
-	@JoinColumn(name = "curso_id", nullable = false)
-	//nullable quer dizer que esse campo não pode ser nulo
+	@JoinColumn(name = "curso_id")
+	// nullable quer dizer que esse campo não pode ser nulo
 	private Curso curso;
 
 	public Aula() {
 	}
 
-	public Aula(Integer id, String nomeAula, String aulaLink, Curso curso) {
+	public Aula(Integer id, @NotBlank String nomeAula, @NotBlank String aulaLink, Curso curso) {
 		super();
 		this.id = id;
 		this.nomeAula = nomeAula;
 		this.aulaLink = aulaLink;
 		this.curso = curso;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -70,18 +70,13 @@ public class Aula implements Serializable {
 		this.aulaLink = aulaLink;
 	}
 
-	
+	@JsonIgnore
 	public Curso getCurso() {
 		return curso;
 	}
 
 	public void setCurso(Curso curso) {
 		this.curso = curso;
-	}
-
-	@Override
-	public String toString() {
-		return "Aula [id=" + id + ", nomeAula=" + nomeAula + ", aulaLink=" + aulaLink + ", curso=" + curso + "]";
 	}
 
 }

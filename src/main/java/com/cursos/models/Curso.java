@@ -26,45 +26,39 @@ public class Curso implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//@JsonProperty("_id") - informa como esse dado chegará no front-end
-	private Integer id;
-	@NotBlank(message = "Por favor, digite um nome") //Não permite salvar nulo ou vázio
-	@Column(length = 50, nullable = false, unique = true) //Unique = não deixa repetir o nome salvo
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	// @JsonProperty("_id")// - informa como esse dado chegará no front-end
+	private Integer curso_id;
+	@NotBlank(message = "Por favor, digite um nome") // Não permite salvar nulo ou vázio
+	@Column(length = 50, nullable = false, unique = true) // Unique = não deixa repetir o nome salvo
 	private String nome;
 	@NotBlank
 	@Column(length = 15, nullable = false)
 	private String categoria;
-	
-	//orphanRemoval, para remover as aulas - cascade = CascadeType.REMOVE, remover as aulas só quando curso for removido
-	@OneToMany(mappedBy = "curso", orphanRemoval = true, cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+
+	// orphanRemoval, para remover as aulas - cascade = CascadeType.REMOVE, remover
+	// as aulas só quando curso for removido
+	@OneToMany(mappedBy = "curso", orphanRemoval = true, cascade = CascadeType.PERSIST.REFRESH.REMOVE, fetch = FetchType.LAZY)
 	private List<Aula> aulas = new ArrayList<Aula>();
 
 	public Curso() {
 	}
 
-	public Curso(Integer id, String nome, String categoria, List<Aula> aulas) {
+	public Curso(Integer curso_id, @NotBlank(message = "Por favor, digite um nome") String nome,
+			@NotBlank String categoria, List<Aula> aulas) {
 		super();
-		this.id = id;
+		this.curso_id = curso_id;
 		this.nome = nome;
 		this.categoria = categoria;
 		this.aulas = aulas;
 	}
 
-	public String getCategoria() {
-		return categoria;
+	public Integer getCurso_id() {
+		return curso_id;
 	}
 
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
+	public void setCurso_id(Integer curso_id) {
+		this.curso_id = curso_id;
 	}
 
 	public String getNome() {
@@ -75,7 +69,14 @@ public class Curso implements Serializable {
 		this.nome = nome;
 	}
 
-	@JsonIgnore
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
 	public List<Aula> getAulas() {
 		return aulas;
 	}
