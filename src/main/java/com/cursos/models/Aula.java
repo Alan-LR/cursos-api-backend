@@ -14,7 +14,6 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 @Entity
 @Table(name = "Aulas")
 public class Aula implements Serializable {
@@ -23,27 +22,20 @@ public class Aula implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	@NotBlank
+
 	@Column(nullable = false)
 	private String nomeAula;
-	@NotBlank
+
 	private String aulaLink;
 
-	
-	@ManyToOne
-	@JoinColumn(name = "curso_id")
 	// nullable quer dizer que esse campo não pode ser nulo
+	@JsonIgnore
+	@org.hibernate.annotations.ForeignKey(name = "usuario_id")
+	@ManyToOne(optional = false)
+	//@JoinColumn(name = "curso_id")
 	private Curso curso;
 
 	public Aula() {
-	}
-
-	public Aula(Integer id, @NotBlank String nomeAula, @NotBlank String aulaLink, Curso curso) {
-		super();
-		this.id = id;
-		this.nomeAula = nomeAula;
-		this.aulaLink = aulaLink;
-		this.curso = curso;
 	}
 
 	public Integer getId() {
@@ -70,7 +62,6 @@ public class Aula implements Serializable {
 		this.aulaLink = aulaLink;
 	}
 
-	@JsonIgnore
 	public Curso getCurso() {
 		return curso;
 	}

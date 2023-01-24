@@ -15,10 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @Entity
 @Table(name = "Cursos")
@@ -38,7 +36,8 @@ public class Curso implements Serializable {
 
 	// orphanRemoval, para remover as aulas - cascade = CascadeType.REMOVE, remover
 	// as aulas só quando curso for removido
-	@OneToMany(mappedBy = "curso", orphanRemoval = true, cascade = CascadeType.PERSIST.REFRESH.REMOVE, fetch = FetchType.LAZY)
+
+	@OneToMany(mappedBy = "curso", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Aula> aulas = new ArrayList<Aula>();
 
 	public Curso() {

@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -77,8 +76,11 @@ public class CursoController {
 	}
 
 	// Alterando curso (Recebendo id no corpo json)
-	@PutMapping(value = "/", produces = "application/json")
+	@PutMapping(value = "alterando/", produces = "application/json")
 	public ResponseEntity<Curso> atualizar(@RequestBody Curso curso) throws Exception {
+		for (int pos = 0; pos < curso.getAulas().size(); pos++) {
+			curso.getAulas().get(pos).setCurso(curso);
+		}
 		return new ResponseEntity<Curso>(cursoService.salvarCurso(curso), HttpStatus.OK);
 	}
 
@@ -89,6 +91,7 @@ public class CursoController {
 		if (!result.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
+			System.out.println("Entrou");
 			return new ResponseEntity<Optional<Curso>>(result, HttpStatus.OK);
 		}
 	}

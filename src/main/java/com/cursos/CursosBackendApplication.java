@@ -9,7 +9,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @EntityScan(basePackages = {"com.cursos.models"})
@@ -20,11 +22,24 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RestController
 @EnableAutoConfiguration
 @EnableCaching
-public class CursosBackendApplication {
+public class CursosBackendApplication  implements WebMvcConfigurer{
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursosBackendApplication.class, args);
 		System.out.println("aplicação cursos-api iniciada!");
+	}
+	
+    /*Mapeamento Global que refletem em todo o sistema*/
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		
+		registry.addMapping("/cursos/*")
+		.allowedMethods("*")
+		.allowedOrigins("*")
+		.allowedHeaders("*")
+		.allowedOriginPatterns("*");
+		/*Liberando o mapeamento de usuario para todas as origens*/
+		
 	}
 
 }

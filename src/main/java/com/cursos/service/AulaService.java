@@ -30,6 +30,11 @@ public class AulaService {
 	public Page<Aula> findAll(PageRequest page) {
 		 return aulasRepository.findAll(page);
 	}
+	
+	public Page<Aula> findVideo(Pageable page) {
+		 return aulasRepository.findAll(page);
+	}
+	
 
 	public List<Aula> pegarTodos() {
 		return aulasRepository.findAll();

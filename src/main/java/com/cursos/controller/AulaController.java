@@ -26,6 +26,7 @@ import com.cursos.models.Aula;
 import com.cursos.models.Curso;
 import com.cursos.service.AulaService;
 
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(value = "/aulas")
@@ -35,7 +36,7 @@ public class AulaController {
 	private AulaService aulaService;
 
 	// Criar uma aula
-	@PostMapping(value = "/" , produces = "application/json") 
+	@PostMapping(value = "/", produces = "application/json")
 	public ResponseEntity<Aula> salvarCurso(@RequestBody Aula aula) throws Exception {
 		return new ResponseEntity<Aula>(aulaService.salvarAula(aula), HttpStatus.CREATED);
 	}
@@ -83,6 +84,17 @@ public class AulaController {
 		return new ResponseEntity<Page<Aula>>(listPage, HttpStatus.OK);
 	}
 
+	@GetMapping("/video")
+	public ResponseEntity<Page<Aula>> getAllLives(
+			@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable page) {
+		Page<Aula> aula = aulaService.findVideo(page);
+		if (aula.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Page<Aula>>(aula, HttpStatus.OK);
+		}
+	}
+
 	// Retornando todas as aulas sem paginação
 	@GetMapping(value = "/", produces = "application/json")
 	public ResponseEntity<List<Aula>> todosCursos() {
@@ -91,16 +103,14 @@ public class AulaController {
 
 	// Metodo para retornar todas as aulas de um curso com pageable
 	@GetMapping(value = "/curso/{id}")
-	public ResponseEntity<Page<Aula>> aulasCurso(
-			@PathVariable Integer id,
+	public ResponseEntity<Page<Aula>> aulasCurso(@PathVariable Integer id,
 			@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
 		Page<Aula> aulasPage = aulaService.aulasCurso(id, pageable);
-		if(aulasPage.isEmpty()) {
+		if (aulasPage.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Page<Aula>>(aulasPage, HttpStatus.OK);
 	}
-
 
 	@DeleteMapping("/{id}")
 	// ? - quer dizer que podemos retornar qualquer coisa, algo generico

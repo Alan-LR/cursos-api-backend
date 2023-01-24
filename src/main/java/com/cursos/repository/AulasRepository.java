@@ -14,6 +14,6 @@ import com.cursos.models.Aula;
 @Repository
 public interface AulasRepository extends JpaRepository<Aula, Integer>{
 
-	@Query(nativeQuery = true, value = "select * from aulas where curso_id = ?1")
+	@Query(nativeQuery = true, value = "select * from aulas where curso_curso_id = ?1")
 	Page<Aula> aulasCurso(Integer id, Pageable pageable);
 }
